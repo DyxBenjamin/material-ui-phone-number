@@ -52,10 +52,13 @@ class MaterialUiPhoneNumber extends React.Component {
   flags = {};
 
   guessSelectedCountry = memoize((inputNumber, onlyCountries, defaultCountry) => {
+
     const secondBestGuess = find(onlyCountries, { iso2: defaultCountry }) || {};
     if (trim(inputNumber) === '') return secondBestGuess;
 
     const bestGuess = reduce(onlyCountries, (selectedCountry, country) => {
+
+
       if (startsWith(inputNumber, country.dialCode)) {
         if (country.dialCode.length > selectedCountry.dialCode.length) {
           return country;
@@ -67,7 +70,21 @@ class MaterialUiPhoneNumber extends React.Component {
       return selectedCountry;
     }, { dialCode: '', priority: 10001 }, this);
 
+    //detects if the number is from the same country or from another country
+    //canada and usa have the same dial code, hence can't be detected individually
+    if(bestGuess.iso2 === 'us') {
+      const areaCode = inputNumber.replace(/\D/g, '').substring(1, 4);
+      const canada = find(onlyCountries, { iso2: 'ca' });
+      const usa = find(onlyCountries, { iso2: 'us' });
+    if(canada.hasAreaCodes.includes(areaCode)) {
+      return canada;
+    }
+    return usa;
+    }
+
+
     if (!bestGuess.name) return secondBestGuess;
+
     return bestGuess;
   });
 
