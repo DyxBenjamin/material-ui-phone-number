@@ -1,6 +1,6 @@
 {
   "name": "dyxbenjamin-mui-phone-number",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "A material-ui react component to format phone numbers. Based on react-phone-input-2",
   "main": "dist/index.js",
   "types": "index.d.ts",
